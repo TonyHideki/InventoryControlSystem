@@ -11,3 +11,8 @@ public class FileManager {
     public List<Product> loadProducts() { ... }
     public void saveProducts(List<Product> products) { ... }
 }
+
+/*ポイント：
+
+    loadProducts() … 起動時にCSVを読み込んでList<Product>を返す
+    saveProducts() … 終了時に商品リストをCSVに書き込む          */
