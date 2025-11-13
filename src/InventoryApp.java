@@ -1,5 +1,13 @@
 //package inventory;  // パッケージを使わない場合は削除してOK
 
+import java.io.Console;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -8,9 +16,11 @@ import java.util.*;
  */
 public class InventoryApp {
 
+    private static final Charset CONSOLE_CHARSET = detectConsoleCharset();
+
     private Inventory inventory = new Inventory();
     private FileManager fileManager = new FileManager();
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = createScanner();
 
     // ==========================
     // メインメソッド
@@ -53,6 +63,26 @@ public class InventoryApp {
         }
 
         scanner.close();
+    }
+    // ==========================
+    // コンソールの文字コード検出処理
+    // ==========================    
+    private static Charset detectConsoleCharset() {
+        Console console = System.console();
+        if (console != null) {
+            return console.charset();
+        }
+        return StandardCharsets.UTF_8;
+    }
+
+    private static Scanner createScanner() {
+        try {
+            System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, CONSOLE_CHARSET.name()));
+            System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), true, CONSOLE_CHARSET.name()));
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("⚠️ コンソール出力の文字コード設定に失敗しました: " + e.getMessage());
+        }
+        return new Scanner(new InputStreamReader(System.in, CONSOLE_CHARSET));
     }
 
     // ==========================

@@ -1,6 +1,10 @@
 //package inventory;  // パッケージを使わない場合は削除してOK
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -31,7 +35,8 @@ public class FileManager {
      * @param products 保存対象の商品リスト
      */
     public void saveProducts(List<Product> products) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+        Path path = Paths.get(filePath);
+        try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
             // ヘッダ行（任意）
             bw.write("id,name,quantity,price");
             bw.newLine();
@@ -71,7 +76,8 @@ public class FileManager {
             return products;
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        Path path = Paths.get(filePath);
+        try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             String line;
             boolean firstLine = true;
 
